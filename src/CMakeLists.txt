@@ -1,0 +1,25 @@
+set(tfls_SRC
+	${CMAKE_CURRENT_LIST_DIR}/ban.cpp
+	${CMAKE_CURRENT_LIST_DIR}/configmanager.cpp
+	${CMAKE_CURRENT_LIST_DIR}/connection.cpp
+	${CMAKE_CURRENT_LIST_DIR}/database.cpp
+	${CMAKE_CURRENT_LIST_DIR}/databasemanager.cpp
+	${CMAKE_CURRENT_LIST_DIR}/databasetasks.cpp
+	${CMAKE_CURRENT_LIST_DIR}/fileloader.cpp
+	${CMAKE_CURRENT_LIST_DIR}/gameserverconfig.cpp
+	${CMAKE_CURRENT_LIST_DIR}/iologindata.cpp
+	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/otpch.cpp
+	${CMAKE_CURRENT_LIST_DIR}/otserv.cpp
+	${CMAKE_CURRENT_LIST_DIR}/outputmessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocol.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocollogin.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocolold.cpp
+	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
+	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
+	${CMAKE_CURRENT_LIST_DIR}/server.cpp
+	${CMAKE_CURRENT_LIST_DIR}/tasks.cpp
+	${CMAKE_CURRENT_LIST_DIR}/tools.cpp
+	${CMAKE_CURRENT_LIST_DIR}/wildcardtree.cpp
+)
+
