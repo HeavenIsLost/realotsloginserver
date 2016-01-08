@@ -130,6 +130,9 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	}
 
 	if (version >= 1080) {
+		if(version >= 1082) {
+			output->addByte(0);//Account state
+		}
 		output->addByte(g_config.getBoolean(ConfigManager::FREE_PREMIUM) || account.premiumDays > 0);
 		output->add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : (OTSYS_TIME() + (account.premiumDays * 86400)));
 	}
