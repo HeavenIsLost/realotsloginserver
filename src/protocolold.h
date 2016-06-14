@@ -21,6 +21,7 @@
 #define FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
 
 #include "protocol.h"
+#include "iologindata.h"
 
 class NetworkMessage;
 class OutputMessage;
@@ -42,6 +43,9 @@ class ProtocolOld final : public Protocol
 
 	protected:
 		void disconnectClient(const std::string& message);
+
+		void updatePremium(Account& account);
+		void getCharacterList(const uint32_t accountNumber, const std::string& password);
 };
 
 #endif

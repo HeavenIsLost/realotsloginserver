@@ -29,7 +29,7 @@ class IOLoginData
 		static Account loadAccount(uint32_t accno);
 		static bool saveAccount(const Account& acc);
 
-		static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
+		static bool loginserverAuthentication(const uint32_t accountNumber, const std::string& password, Account& account);
 
 		static AccountType_t getAccountType(uint32_t accountId);
 		static void setAccountType(uint32_t accountId, AccountType_t accountType);

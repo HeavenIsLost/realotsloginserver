@@ -62,12 +62,41 @@ bool ConfigManager::load()
 		integer[LOGIN_PORT] = getGlobalNumber(L, "port", 7171);
 		integer[CLIENT_VERSION_MIN] = getGlobalNumber(L, "clientVersionMin", 1080);
 		integer[CLIENT_VERSION_MAX] = getGlobalNumber(L, "clientVersionMax", 1080);
+
+		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
+
+		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
+		string[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
 	}
 
+	boolean[FREE_PREMIUM] = getGlobalBoolean(L, "freePremium", false);
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
+
+	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
+	string[OWNER_NAME] = getGlobalString(L, "ownerName", "");
+	string[OWNER_EMAIL] = getGlobalString(L, "ownerEmail", "");
+	string[URL] = getGlobalString(L, "url", "");
+	string[LOCATION] = getGlobalString(L, "location", "");
+
 	string[MOTD] = getGlobalString(L, "motd", "");
 	integer[MOTD_NUM] = getGlobalNumber(L, "motdNum", 0);
+
+	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
+
+	integer[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
+	integer[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
+	integer[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
+	integer[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
+	integer[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
+
+	integer[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
+
 	integer[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
+
+	integer[MONSTER_COUNT] = getGlobalNumber(L, "monsterCount", 0);
+	integer[NPC_COUNT] = getGlobalNumber(L, "npcCount", 0);
+	integer[MAP_WIDTH] = getGlobalNumber(L, "mapWidth", 0);
+	integer[MAP_HEIGHT] = getGlobalNumber(L, "mapHeight", 0);
 
 	loaded = true;
 	lua_close(L);

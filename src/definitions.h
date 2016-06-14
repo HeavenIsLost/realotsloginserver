@@ -20,9 +20,9 @@
 #ifndef FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
 #define FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
 
-#define STATUS_SERVER_NAME "The Forgotten Login Server"
-#define STATUS_SERVER_VERSION "0.1a"
-#define STATUS_SERVER_DEVELOPERS "Milice & Mark Samman"
+#define STATUS_SERVER_NAME "Dark Tibia Server"
+#define STATUS_SERVER_VERSION "0.2"
+#define STATUS_SERVER_DEVELOPERS "Milice, Yamaken & Mark Samman"
 
 #ifndef __FUNCTION__
 #define __FUNCTION__ __func__

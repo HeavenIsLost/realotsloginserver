@@ -37,6 +37,13 @@ class ConfigManager
 
 		enum string_config_t {
 			DUMMY_STR,
+			SERVER_NAME,
+			OWNER_NAME,
+			OWNER_EMAIL,
+			URL,
+			LOCATION,
+			MAP_NAME,
+			MAP_AUTHOR,
 			IP,
 			MOTD,
 			WORLD_TYPE,
@@ -58,6 +65,19 @@ class ConfigManager
 			MAX_PACKETS_PER_SECOND,
 			CLIENT_VERSION_MIN,
 			CLIENT_VERSION_MAX,
+			MAX_PLAYERS,
+			RATE_EXPERIENCE,
+			RATE_SKILL,
+			RATE_LOOT,
+			RATE_MAGIC,
+			RATE_SPAWN,
+			STATUS_PORT,
+			STATUSQUERY_TIMEOUT,
+			MONSTER_COUNT,
+			NPC_COUNT,
+
+			MAP_WIDTH,
+			MAP_HEIGHT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};

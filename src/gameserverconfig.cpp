@@ -44,7 +44,6 @@ bool GameserverConfig::load()
 		gs.ip = catNode.attribute("ip").as_string();
 		gs.port = pugi::cast<uint16_t>(catNode.attribute("port").value());
 		gs.worldid = pugi::cast<uint16_t>(catNode.attribute("id").value());
-		gs.preview = pugi::cast<bool>(catNode.attribute("preview").value());
 		gameservers.push_back(gs);
 	}
 	

@@ -47,44 +47,45 @@ Account IOLoginData::loadAccount(uint32_t accno)
 bool IOLoginData::saveAccount(const Account& acc)
 {
 	std::ostringstream query;
-	query << "UPDATE `accounts` SET `premdays` = " << acc.premiumDays << ", `lastday` = " << acc.lastDay << " WHERE `id` = " << acc.id;
+	query << "UPDATE `users` SET `premium_days` = " << acc.premiumDays << ", `last_ts` = " << acc.lastDay << " WHERE `login` = " << acc.accountNumber;
 	return Database::getInstance()->executeQuery(query.str());
 }
 
-bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
+bool IOLoginData::loginserverAuthentication(const uint32_t accountNumber, const std::string& password, Account& account)
 {
 	Database* db = Database::getInstance();
-
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT  `passwd`, `premium_days`, `last_ts` FROM `users` WHERE `login` = " << accountNumber;
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	//plain
+	if (password != result->getString("passwd")) {
 		return false;
 	}
 
-	account.id = result->getNumber<uint32_t>("id");
-	account.name = result->getString("name");
-	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
-	account.premiumDays = result->getNumber<uint16_t>("premdays");
-	account.lastDay = result->getNumber<time_t>("lastday");
+	account.accountNumber = accountNumber;
+
+	account.lastDay = result->getNumber<uint64_t>("last_ts");
+	account.premiumDays = result->getNumber<uint16_t>("premium_days");
 
 	query.str(std::string());
-	query << "SELECT `name`, `deletion`, `world` FROM `players` WHERE `account_id` = " << account.id << " ORDER BY name ASC";
+	query << "SELECT `charname`,`playerdelete` FROM `players` WHERE `account_nr` = " << accountNumber << " ORDER BY charname ASC";
 	result = db->storeQuery(query.str());
 	if (result) {
 		do {
-			if (result->getNumber<uint64_t>("deletion") == 0) {
+			if (result->getNumber<uint64_t>("playerdelete") == 0) {
 				Character character;
-				character.name = result->getString("name");
-				character.worldid = result->getNumber<uint16_t>("world");
+				character.name = result->getString("charname");
+				//character.worldid = result->getNumber<uint16_t>("world");
+				//disabled multi world support
+				character.worldid = 0;
+
 				account.characters.push_back(character);
 			}
 		} while (result->next());
-		//std::sort(account.characters.begin(), account.characters.end());
 	}
 	return true;
 }

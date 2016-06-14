@@ -28,11 +28,11 @@
 #include "configmanager.h"
 #include "rsa.h"
 #include "protocolold.h"
-#include "protocollogin.h"
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
 #include "gameserverconfig.h"
+#include "protocolstatus.h"
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -46,7 +46,7 @@ std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
-ServiceManager* serviceManager = nullptr;
+ServiceManager* g_serviceManager = nullptr;
 
 void startupErrorMessage(const std::string& errorStr)
 {
@@ -72,8 +72,8 @@ void shutdown()
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
 
-	if (serviceManager) {
-		serviceManager->stop();
+	if (g_serviceManager) {
+		g_serviceManager->stop();
 	}
 
 	ConnectionManager::getInstance().closeAll();
@@ -97,6 +97,8 @@ int main(int argc, char* argv[])
 
 	ServiceManager serviceManager;
 
+	g_serviceManager = &serviceManager;
+
 	g_dispatcher.start();
 	g_scheduler.start();
 
@@ -109,7 +111,10 @@ int main(int argc, char* argv[])
 #ifdef _WIN32
 		SetConsoleCtrlHandler([](DWORD) -> BOOL {
 			g_dispatcher.addTask(createTask([]() {
-				shutdown();
+				g_dispatcher.addTask(createTask([]() {
+					shutdown();
+				}));
+
 				g_scheduler.stop();
 				g_databaseTasks.stop();
 				g_dispatcher.stop();
@@ -161,7 +166,6 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
-	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
 	std::cout << std::endl;
 
 	// read global config
@@ -188,8 +192,17 @@ void mainLoader(int, char*[], ServiceManager* services)
 #endif
 
 	//set RSA key
+	
+	//cipsoft
+	const char* p("12017580013707233233987537782574702577133548287527131234152948150506251412291888866940292054989907714155267326586216043845592229084368540020196135619327879");
+	const char* q("11898921368616868351880508246112101394478760265769325412746398405473436969889506919017477758618276066588858607419440134394668095105156501566867770737187273");
+	
+	//opentibia
+	/*
 	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
 	const char* q("7630979195970404721891201847792002125535401292779123937207447574596692788513647179235335529307251350570728407373705564708871762033017096809910315212884101");
+	*/
+
 	g_RSA.setKey(p, q);
 
 	std::cout << ">> Establishing database connection..." << std::flush;
@@ -209,14 +222,20 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
+
 	g_databaseTasks.start();
 
 	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
-	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	// Game client protocols
 	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	// OT protocols
+	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
+
+	//check each 1 minute for player amount and record
+	ProtocolStatus::getPlayerRecordAndPlayerAmount();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 

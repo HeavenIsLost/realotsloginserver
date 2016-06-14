@@ -26,7 +26,6 @@ struct GameServer {
 
 	uint16_t worldid;
 	uint16_t port;
-	bool preview;
 };
 
 class GameserverConfig

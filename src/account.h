@@ -34,6 +34,7 @@ struct Account {
 	uint32_t id;
 	uint16_t premiumDays;
 	AccountType_t accountType;
+	uint32_t accountNumber;
 
 	Account() : lastDay(0), id(0), premiumDays(0), accountType(ACCOUNT_TYPE_NORMAL) {}
 };
